@@ -1,131 +1,131 @@
-# Deploying a Tornado Application
+# Menyebarkan Aplikasi Tornado
 
-[Tornado] is an open source version of the scalable, non-blocking web server
-and tools that power FriendFeed written in Python.
+[Tornado] adalah versi open source dari scalable, non-blocking web server yang
+dan alat-alat yang listrik FriendFeed ditulis dengan Python.
 
-In this tutorial we're going to show you how to deploy a simple Tornado based
-application on [cloudControl].
+Dalam tutorial ini kita akan menunjukkan cara untuk menyebarkan Tornado sederhana berdasarkan
+aplikasi pada [CloudKilat].
 
-## The Example App Explained
+## The Contoh App Dijelaskan
 
-### Get the App
-First, lets clone the example code from Github.
-~~~bash
-$ git clone https://github.com/cloudControl/python-tornado-example-app.git
-$ cd python-tornado-example-app
+### Dapatkan App
+Pertama, mari kita mengkloning contoh kode dari Github.
+~~~ Pesta
+$ Git clone https://github.com/cloudControl/python-tornado-example-app.git
+$ Cd python-tornado-contoh-aplikasi
 ~~~
 
-The code from the example repository is ready to be deployed. Lets still go
-through the different files and their purpose real quick.
+Kode dari contoh repositori siap untuk digunakan. Mari kita masih pergi
+melalui file yang berbeda dan tujuan sebenarnya mereka cepat.
 
-### Dependency Tracking
+### Ketergantungan Tracking
 
-The [Python buildpack] tracks dependencies via pip and the `requirements.txt`
-file. It needs to be placed in the root directory of your repository. The
-example app specifies only Tornado itself as a dependency. The one you cloned
-as part of the example app looks like this:
-~~~pip
-tornado==2.4.1
+The [Python buildpack] melacak dependensi melalui pip dan `requirements.txt`
+mengajukan. Ini perlu ditempatkan di direktori root dari repositori Anda. Itu
+contoh aplikasi menspesifikasikan hanya Tornado dirinya sebagai ketergantungan. Yang Anda kloning
+sebagai bagian dari contoh aplikasi terlihat seperti ini:
+~~~ Pip
+tornado == 2.4.1
 ~~~
 
-### Process Type Definition
-cloudControl uses a [Procfile] to know how to start the app's processes.
+### Proses Type Definition
+CloudKilat menggunakan [Procfile] tahu bagaimana untuk memulai proses aplikasi.
 
-The example code already includes a file called `Procfile` at the top level of
-your repository. It looks like this:
+Contoh kode sudah termasuk sebuah file yang bernama `Procfile` di tingkat atas
+repositori Anda. Ini terlihat seperti ini:
 ~~~
-web: python app.py --port=$PORT --logging=error
+web: python app.py --port = $ PORT --logging = error
 ~~~
 
-Left from the colon we specified the **required** process type called `web`
-followed by the command that starts the app and listens on the port specified
-by the environment variable `$PORT`.
+Kiri dari usus besar kita ditentukan ** tipe proses ** diperlukan disebut `web`
+diikuti dengan perintah yang dimulai aplikasi dan mendengarkan pada port tertentu
+oleh variabel lingkungan `$ PORT`.
 
-### The Actual Application Code
+### The Aktual Kode Aplikasi
 
-The actual application code is really straight forward. It provides one handler
-and sets up the app to handle incoming requests asynchronously and render the
-defined template.
+Kode aplikasi yang sebenarnya benar-benar lurus ke depan. Ini menyediakan satu handler
+dan set up aplikasi untuk menangani permintaan yang masuk asynchronous dan menjadikan
+didefinisikan Template.
 
-Finally, we define the command line parameter to specify the port as
-seen in the `Procfile` above, instantiate the HTTP server, make it listen on
-the specified port and start the server forking one process per CPU core.
-~~~python
-from tornado.options import define, options
-import tornado.ioloop
-import tornado.web
-import tornado.httpserver
+Akhirnya, kita mendefinisikan parameter baris perintah untuk menentukan pelabuhan sebagai
+terlihat pada `Procfile` atas, instantiate server HTTP, membuatnya mendengarkan pada
+port tertentu dan mulai server forking satu proses per CPU core.
+~~~ Python
+dari tornado.options mengimpor menentukan, pilihan
+impor tornado.ioloop
+impor tornado.web
+impor tornado.httpserver
 
 
-class MainHandler(tornado.web.RequestHandler):
-    @tornado.web.asynchronous
-    def get(self):
-        self._async_callback()
+kelas MainHandler (tornado.web.RequestHandler):
+    @ Tornado.web.asynchronous
+    def mendapatkan (self):
+        self._async_callback ()
 
-    def _async_callback(self):
-        self.write("Hello, world!")
-        self.finish()
+    def _async_callback (self):
+        self.write ("Hello, world!")
+        self.finish ()
 
-app = tornado.web.Application([
-    (r"/", MainHandler),
+app = tornado.web.Application ([
+    (R "/", MainHandler),
 ])
 
-define("port", default="5555", help="Port to listen on")
+define ("pelabuhan", default = "5555", bantuan = "Pelabuhan untuk mendengarkan pada")
 
-if __name__ == "__main__":
-    tornado.options.parse_command_line()
-    server = tornado.httpserver.HTTPServer(app)
-    server.bind(options.port)
-    # autodetect cpu cores and fork one process per core
-    try:
-        server.start(0)
-        tornado.ioloop.IOLoop.instance().start()
-    except KeyboardInterrupt:
-        tornado.ioloop.IOLoop.instance().stop()
+jika __name__ == "__main__":
+    tornado.options.parse_command_line ()
+    Server = tornado.httpserver.HTTPServer (app)
+    server.bind (options.port)
+    # Core cpu autodetect dan garpu satu proses per inti
+    coba:
+        server.start (0)
+        tornado.ioloop.IOLoop.instance (). start ()
+    kecuali KeyboardInterrupt:
+        tornado.ioloop.IOLoop.instance (). stop ()
 ~~~
 
-## Pushing and Deploying the App
+## Mendorong dan Menyebarkan App
 
-Choose a unique name to replace the `APP_NAME` placeholder for your application
-and create it on the cloudControl platform:
-~~~bash
-$ cctrlapp APP_NAME create python
+Pilih nama yang unik untuk menggantikan `APP_NAME` tempat untuk aplikasi Anda
+dan menciptakannya pada platform CloudKilat:
+~~~ Pesta
+$ Ironcliapp APP_NAME membuat python
 ~~~
 
-Push your code to the application's repository, which triggers the deployment
-image build process:
-~~~bash
-$ cctrlapp APP_NAME/default push
-Counting objects: 7, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (4/4), done.
-Writing objects: 100% (7/7), 1.01 KiB, done.
-Total 7 (delta 0), reused 7 (delta 0)
+Mendorong kode Anda ke repositori aplikasi, yang memicu penyebaran
+image membangun proses:
+~~~ Pesta
+$ Ironcliapp APP_NAME / dorongan bawaan
+Menghitung objek: 7, dilakukan.
+Delta kompresi menggunakan sampai 4 benang.
+Mengompresi objek: 100% (4/4), dilakukan.
+Menulis objek: 100% (7/7), 1,01 KiB, dilakukan.
+Total 7 (delta 0), kembali 7 (delta 0)
        
------> Receiving push
------> No runtime.txt provided; assuming python-2.7.3.
------> Using Python runtime (python-2.7.3)
------> Installing dependencies using Pip (1.3.1)
-       Downloading/unpacking tornado==2.4.1 (from -r requirements.txt (line 1))
+-----> Mendorong Menerima
+-----> Ada runtime.txt tersedia; asumsi python-2.7.3.
+-----> Menggunakan runtime Python (python-2.7.3)
+-----> Dependensi Instalasi menggunakan Pip (1.3.1)
+       Download / membongkar tornado == 2.4.1 (dari requirements.txt r (baris 1))
        ...
-       Successfully installed tornado
-       Cleaning up...
------> Building image
------> Uploading image (25M)
+       Tornado berhasil diinstal
+       Membersihkan ...
+-----> Gambar Building
+-----> Gambar Mengunggah (25M)
        
-To ssh://APP_NAME@cloudcontrolled.com/repository.git
- + [new branch] master -> master
+Untuk ssh: //APP_NAME@kilatiron.net/repository.git
+ + [Cabang baru] Master -> Master
 ~~~
 
-Last but not least deploy the latest version of the app with the cctrlapp
-deploy command.
-~~~bash
-$ cctrlapp APP_NAME/default deploy
+Terakhir namun tidak sedikit menyebarkan versi terbaru dari aplikasi dengan ironcliapp yang
+menyebarkan perintah.
+~~~ Pesta
+$ Ironcliapp APP_NAME / default menyebarkan
 ~~~
 
-Congratulations, you can now see your Tornado app running at `http://APP_NAME.cloudcontrolled.com`.
+Selamat, Anda sekarang dapat melihat aplikasi berjalan Tornado di `http: // APP_NAME.kilatiron.net`.
 
 [Tornado]: http://www.tornadoweb.org
-[cloudControl]: http://www.cloudcontrol.com
+[CloudKilat]: http://www.cloudkilat.com/
 [Python buildpack]: https://github.com/cloudControl/buildpack-python
-[Procfile]: https://www.cloudcontrol.com/dev-center/platform-documentation#buildpacks-and-the-procfile
+[Procfile]: /Platform%20Documentation.md/#buildpacks-and-the-procfile

@@ -1,126 +1,120 @@
-# cloudControl Quickstart
+# Caracepat memulai CloudKilat 
 
-It's easy to start with cloudControl. Follow this 5 minute quickstart to get your first app running on cloudControl PaaS.
+Untuk memulai dengan CloudKilat sangatlah mudah. Ikuti 5 menit caracepat ini untuk mendapatkan
+Aplikasi pertama Anda yang berjalan di CloudKilat PaaS.
 
-**Note:** All examples starting with $ are supposed to be run in a terminal. For Windows we recommend using Git bash, which comes bundled with the Windows Git installer. Throughout this quickstart and the rest of the documentation placeholders are marked by being written all uppercase.
+**Catatan:** Semua contoh dimulai dengan $ seharusnya dijalankan dalam terminal.
+Untuk Windows sebaiknya menggunakan Git bash, yang dibundel dengan Windows
+Instalasi Git. Sepanjang caracepat ini dan seluruh dokumentasi
+penampung ditandai dengan ditulis huruf besar semua.
 
-## Install the Required Software
+## Pasang Perangkatlunak yang Diperlukan
 
-### Requirements
+### Persyaratan
 
-* git version control system
-* cctrl command line client
+* Sistem kontrol versi git
+* Perintah ironcliuser/ironcliapp baris klien
 
-### Install git
+### Pasang git
 
-Install Git from the [official site](http://git-scm.com/) or your package repository of choice. For Windows it's recommended to use the official installer and Git bash. Come back when you are done.
+Instal Git dari [situs resmi](http://git-scm.com/) atau dari paket
+repositori pilihan Anda. Untuk Windows dianjurkan untuk menggunakan installer resmi dan Git bash. Silahkan instal aplikasi tersebut.
 
-### Install cctrl
+### Instal baris perintah klien
 
-**Linux/Mac OS X:** We recommend installing cctrl via pip.
+**Linux/Mac OS X:** Kami sarankan menginstal klien baris perintah melalui pip.
 
 ~~~bash
-# if you don't have pip yet
+# Jika Anda belum memiliki pip
 $ sudo easy_install pip
-$ sudo pip install cctrl
+$ sudo pip install ironcli
 ~~~
 
-**Windows:** Please download the provided [installer](https://download.cloudcontrolled.com/windows).
+**Windows:** Silahkan download yang disediakan [installer].
 
-## Create a User Account (if you haven't already)
+## Buat Akun Pengguna (jika Anda belum memilikinya)
 
-You can register on the website or directly from the command line. Provide the required values when prompted.
+Anda dapat mendaftar di [www.cloudkilat.com](http://www.cloudkilat.com/).
 
-~~~bash
-$ cctrluser create
-Username: USERNAME
-Email   : EMAIL
-Password: PASSWORD
-Password (again): PASSWORD
-User has been created. Please check you e-mail for your confirmation code.
-~~~
+## Tambahkan Public Key
 
-Activate your user account with the activate command.
-
-~~~bash
-$ cctrluser activate USERNAME ACTIVATION_CODE
-~~~
-
-Replace `USERNAME` and `ACTIVATION_CODE` with the values form the activation e-mail. If you didn't receive one, double check the spelling of your e-mail address or check your SPAM folder.
-
-## Add a Public Key
-
-~~~bash
-$ cctrluser key.add
-Email   : EMAIL
+~~~ bash
+$ ironcliuser key.add
+Email: EMAIL
 Password: PASSWORD
 ~~~
 
-The command line client will determine if you already have a public key and upload that or offer to create one.
+Baris perintah klien akan menentukan apakah Anda sudah memiliki kunci publik dan menguploadnya atau menawarkan untuk membuatnya.
 
-## Create the First Application on cloudControl
+## Membuat Aplikasi Pertama di CloudKilat
 
-Create a new application on the cloudControl platform by giving it an unique `APP_NAME` (the name is used as the `.cloudcontrolled.com` subdomain) and choosing the `TYPE`.
+Membuat aplikasi baru pada platform CloudKilat dengan memberikan nama  yang unik `APP_NAME` (nama yang akan digunakan sebagai subdomain `.kilatiron.net`) dan pilihlah tipenya
+`TYPE`.
 
 ~~~bash
-$ cctrlapp APP_NAME create [java, php, python, ruby, nodejs]
+$ ironcliapp APP_NAME create [java, php, python, ruby, nodejs]
 ~~~
 
-If the `APP_NAME` is already taken, please pick another one.
+Jika `APP_NAME` sudah digunakan, silakan memilih nama yang lain.
 
-Change to the working directory where you want to store your source code.
+Ubah ke direktori kerja di mana Anda ingin menyimpan sumberkode Anda.
 
 ~~~bash
-$ cd PATH_TO/YOUR_WORKDIR
+$ Cd PATH_TO/YOUR_WORKDIR
 ~~~
 
-Clone one of the example apps in your preferred programming language and push it to the cloudControl platform.
+Mengkloning salah satu contoh aplikasi dalam bahasa pemrograman pilihan Anda dan mendorongnya ke platform CloudKilat.
 
 ~~~bash
-# for Java
-$ git clone https://github.com/cloudControl/java-jetty-example-app.git
-$ cd java-jetty-example-app
+# untuk Java
+$ git clone https://github.com/cloudControl/java-jetty-jsp-example-app.git
+$ cd java-jetty-jsp-example-app
 
-# for PHP
+# untuk PHP
 $ git clone https://github.com/cloudControl/php-silex-example-app.git
 $ cd php-silex-example-app
 
-# for Python
+# untuk Python
 $ git clone https://github.com/cloudControl/python-flask-example-app.git
 $ cd python-flask-example-app
 
-# for Ruby
+# untuk Ruby
 $ git clone https://github.com/cloudControl/ruby-sinatra-example-app.git
 $ cd ruby-sinatra-example-app
 
-# for Node.js
+# untuk Node.js
 $ git clone https://github.com/cloudControl/nodejs-express-example-app.git
 $ cd nodejs-express-example-app
 
-# now push
-$ cctrlapp APP_NAME push
+# Lalu kirim ke repositori
+$ ironcliapp APP_NAME push
 ~~~
 
-The push fires a hook that prepares your application for deployment like pulling in requirements and more. You can see the output of the build process in your terminal.
+Kiriman anda akan membuat persiapan untuk aplikasi yang akan dipasang seperti 
+mengunduh persyaratan dan banyak lagi. Anda bisa melihat prosesnya di terminal.
 
-## Deploy Your Application on cloudControl
+## Pasang Aplikasi Anda di CloudKilat
 
-Deploy your app with
+Pasang aplikasi anda dengan
 
 ~~~bash
-$ cctrlapp APP_NAME deploy
+$ ironcliapp APP_NAME deploy
 ~~~
 
-**Congratulations, your app is now up and running.**
+**Selamat, aplikasi anda sudah berjalan dan dapat digunakan.**
 
 ~~~bash
-http[s]://APP_NAME.cloudcontrolled.com
+http[s]://APP_NAME.kilatiron.net
 ~~~
 
-## Cheatsheet
+## Contekan
 
-Grab [our cheatsheet (PDF)](https://cmsengine.s3.amazonaws.com/sites/544a16276a594a501e0000ec/theme/others/cctrl_cheatsheet.pdf) to have the most important command line client commands handy at all times.
+Unduh  [our cheatsheet (PDF)](/cloudkilat_cheatsheet.pdf) untuk memiliki baris perintah yang penting kapan saja.
 
-## Documentation
+## Dokumentasi
 
-To learn more about all the platform features and how to integrate it seamlessly into the development life cycle please refer to the extensive [platform documentation](https://www.cloudcontrol.com/dev-center/platform-documentation).
+Untuk mempelajari lebih lanjut tentang semua fitur platform dan bagaimana cara untuk mengintegrasikannya
+ke dalam siklus hidup pengembangan silahkan lihat ekstensif
+[Dokumentasi platform](/Platform Documentation.md).
+
+[installer]: https://www.cloudcontrol.com/download/win

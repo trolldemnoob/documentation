@@ -1,122 +1,122 @@
-#Deploying a Silex application on cloudControl
+#Deploying Aplikasi Silex pada CloudKilat
 
-[Silex] is a PHP microframework for PHP 5.3. It is inspired by sinatra and
-built on the shoulders of Symfony2 and Pimple.
+[Silex] adalah microframework PHP untuk PHP 5.3. Hal ini terinspirasi oleh sinatra dan
+dibangun di pundak Symfony2 dan Jerawat.
 
-In this tutorial we're going to show you how to deploy a Silex application on
-[cloudControl]. You can find the [source code on Github][example-app] and check
-out the [php buildpack] for supported features.
+Dalam tutorial ini kita akan menunjukkan kepada Anda bagaimana untuk menggunakan aplikasi Silex pada
+[CloudKilat]. Anda dapat menemukan [kode sumber di Github] [contoh-aplikasi] dan cek
+keluar [php buildpack] untuk fitur didukung.
 
 
-##The Silex App Explained
+## The Silex App Dijelaskan
 
-###Get the App
-First, let’s clone the Silex App from our repository on Github:
-~~~bash
-$ git clone https://github.com/cloudControl/php-silex-example-app.git
-$ cd php-silex-example-app
+### Dapatkan App
+Pertama, mari kita mengkloning Silex App dari repositori kami pada Github:
+~~~ Pesta
+$ Git clone https://github.com/cloudControl/php-silex-example-app.git
+$ Cd php-silex-contoh-aplikasi
 ~~~
 
-Now you have a small but fully functional Silex application.
+Sekarang Anda memiliki aplikasi Silex kecil tapi berfungsi penuh.
 
 
-### Dependency Tracking
-The PHP buildpack tracks dependencies via [Composer]. Requirements are read
-from `composer.json` in the project's root directory. For this simple app the
-requirements are:
+### Ketergantungan Tracking
+PHP buildpack melacak dependensi melalui [Komposer]. Persyaratan dibaca
+dari `composer.json` di direktori root proyek. Untuk aplikasi sederhana ini
+persyaratan adalah:
 
-~~~json
+~~~ Json
 {
-    "minimum-stability": "dev",
-    "require": {
-        "silex/silex": "*",
-        "twig/twig": "*",
-        "mheap/Silex-Assetic": "*",
-        "natxet/CssMin": "*"
+    "Minimum stabilitas": "dev",
+    "Membutuhkan": {
+        "Silex / silex": "*",
+        "Ranting / ranting": "*",
+        "Mheap / Silex-Assetic": "*",
+        "Natxet / CssMin": "*"
     }
 }
 ~~~
 
-Note that there is also the `composer.lock`. When you change the dependencies,
-you should run the `composer.phar update` command to update the
-`composer.lock`.  This file must be in your repository and ensures that all the
-developers always use the same versions of all the libraries. It also makes the
-changes visible in git. Also note that your `.gitignore` should contain
-`vendor` as proposed in the 
-[Composer documentation](http://getcomposer.org/doc/01-basic-usage.md#installing-dependencies),
-since you don't need all that code in your repository.
+Perhatikan bahwa ada juga `composer.lock`. Ketika Anda mengubah ketergantungan,
+Anda harus menjalankan `composer.phar update` perintah untuk memperbarui
+`Composer.lock`. File ini harus dalam repositori Anda dan memastikan bahwa semua
+pengembang selalu menggunakan versi yang sama dari semua perpustakaan. Hal ini juga membuat
+perubahan terlihat di git. Juga mencatat bahwa `.gitignore` Anda harus berisi
+`Vendor` seperti yang diusulkan dalam
+[Komposer dokumentasi] (http://getcomposer.org/doc/01-basic-usage.md#installing-dependencies),
+karena Anda tidak perlu semua bahwa kode dalam repositori Anda.
 
 
 ## Document Root Definition
 
-The PHP buildpack allows the user to override the default document root. It is done via
-configuration file in the `.buildpack/apache/conf/` directory. The file should use
-`.conf` extension. In this tutorial the file is named `documentroot.conf` and has
-the following content:
-~~~conf
-DocumentRoot /app/www/web
-<Directory /app/www/web>
-    AllowOverride All
-    Options SymlinksIfOwnerMatch
-    Order Deny,Allow
-    Allow from All
+PHP buildpack memungkinkan pengguna untuk menimpa akar dokumen default. Hal ini dilakukan melalui
+file konfigurasi di `.buildpack / apache / conf /` direktori. File harus menggunakan
+`Ekstensi .conf`. Dalam tutorial ini file yang bernama `documentroot.conf` dan memiliki
+konten berikut:
+~~~ Conf
+DocumentRoot / app / www / web
+<Directory / app / www / web>
+    AllowOverride Semua
+    Pilihan SymLinksIfOwnerMatch
+    Agar Deny, Allow
+    Izinkan dari Semua
     DirectoryIndex index.php index.html index.htm
-</Directory>
+</ Directory>
 ~~~
 
-For more information check out [the buildpack documentation][php buildpack].
+Untuk informasi lebih lanjut lihat [dokumentasi buildpack] [php buildpack].
 
-## Pushing and Deploying the App
-Choose a unique name to replace the `APP_NAME` placeholder for your application and create it on the cloudControl platform:
-~~~bash
-$ cctrlapp APP_NAME create php
+## Mendorong dan Menyebarkan App
+Pilih nama yang unik untuk menggantikan `APP_NAME` tempat untuk aplikasi Anda dan membuatnya pada platform CloudKilat:
+~~~ Pesta
+$ Ironcliapp APP_NAME membuat php
 ~~~
 
-Push your code to the application's repository, which triggers the deployment image build process:
+Mendorong kode Anda ke repositori aplikasi, yang memicu penyebaran gambar proses build:
 ~~~
-$ cctrlapp APP_NAME/default push
-Counting objects: 29, done.
-Delta compression using up to 4 threads.
-Compressing objects: 100% (21/21), done.
-Writing objects: 100% (29/29), 459.72 KiB | 720 KiB/s, done.
-Total 29 (delta 5), reused 18 (delta 0)
+$ Ironcliapp APP_NAME / dorongan bawaan
+Menghitung benda: 29, dilakukan.
+Delta kompresi menggunakan sampai 4 benang.
+Mengompresi objek: 100% (21/21), dilakukan.
+Menulis objek: 100% (29/29), 459,72 KiB | 720 KiB / s, dilakukan.
+Total 29 (delta 5), ​​kembali 18 (delta 0)
 
------> Receiving push
-       Loading composer repositories with package information
-       Installing dependencies (including require-dev) from lock file
-         - Installing symfony/process (dev-master 998d489)
-           Cloning 998d489806011e1d790db5fc0284e6083cc8ea8b
+-----> Mendorong Menerima
+       Repositori Memuat komposer dengan informasi paket
+       Instalasi dependensi (termasuk membutuhkan-dev) dari file kunci
+         - Instalasi symfony / proses (dev-master 998d489)
+           Kloning 998d489806011e1d790db5fc0284e6083cc8ea8b
 
-         - Installing kriswallsmith/assetic (dev-master f9f754d)
-           Cloning f9f754dc7524acd6daf0bf510d22c055b4967e08
+         - Instalasi kriswallsmith / assetic (dev-master f9f754d)
+           Kloning f9f754dc7524acd6daf0bf510d22c055b4967e08
 
-         - Installing symfony/finder (dev-master 57b6772)
-           Cloning 57b67729f863be8b950441a739b82678b91accde
+         - Instalasi symfony / finder (dev-master 57b6772)
+           Kloning 57b67729f863be8b950441a739b82678b91accde
 
            ...
 
-       Generating autoload files
------> Building image
------> Uploading image (14M)
+       Menghasilkan file autoload
+-----> Gambar Building
+-----> Gambar Mengunggah (14M)
 
-To ssh://APP_NAME@cloudcontrolled.com/repository.git
-* [new branch]      master -> master
+Untuk ssh: //APP_NAME@kilatiron.net/repository.git
+* [Cabang baru] Master -> Master
 ~~~
 
-Last but not least deploy the latest version of the app with the cctrlapp deploy command:
-~~~bash
-$ cctrlapp APP_NAME/default deploy
+Terakhir namun tidak sedikit menyebarkan versi terbaru dari aplikasi dengan ironcliapp yang menyebarkan perintah:
+~~~ Pesta
+$ Ironcliapp APP_NAME / default menyebarkan
 ~~~
 
-Congratulations, you can now see your Silex app running at `http[s]://APP_NAME.cloudcontrolled.com`.
+Selamat, Anda sekarang dapat melihat aplikasi Silex Anda berjalan pada `http [s]: // APP_NAME.kilatiron.net`.
 
 
-[silex]: http://silex.sensiolabs.org/
-[cloudControl]: http://www.cloudcontrol.com
-[cloudControl-doc-user]: https://www.cloudcontrol.com/dev-center/platform-documentation#user-accounts
-[cloudControl-doc-cmdline]: https://www.cloudcontrol.com/dev-center/platform-documentation#platform-access
-[php buildpack]: https://github.com/cloudControl/buildpack-php
-[procfile]: https://www.cloudcontrol.com/dev-center/platform-documentation#buildpacks-and-the-procfile
-[git]: https://help.github.com/articles/set-up-git
-[composer]: http://getcomposer.org/
-[example-app]: https://github.com/cloudControl/php-silex-example-app
+[Silex]: http://silex.sensiolabs.org/
+[CloudKilat]: http://www.cloudkilat.com/
+[CloudKilat-doc-user]: / Landasan% 20Documentation / # user-account
+[CloudKilat-doc-cmdline]: / Landasan% 20Documentation / # baris perintah-client-web-konsol-dan-api "dokumentasi CloudKilat-baris perintah-client"
+[Php buildpack]: https://github.com/cloudControl/buildpack-php
+[Procfile]: / Landasan% 20Documentation / # buildpacks-dan-the-procfile
+[Git]: https://help.github.com/articles/set-up-git
+[Komposer]: http://getcomposer.org/
+[Contoh-aplikasi]: https://github.com/cloudControl/php-silex-example-app

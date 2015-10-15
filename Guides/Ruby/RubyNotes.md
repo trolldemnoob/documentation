@@ -1,116 +1,116 @@
-# Ruby Notes
+# Ruby Catatan
 
 
 ## Procfile
 
-The cloudControl platform uses a file named `Procfile` to determine how to run your
-application. This `Procfile` uses the YAML format to specify the desired
-configuration.
+Platform CloudKilat menggunakan file bernama `Procfile` untuk menentukan bagaimana menjalankan Anda
+aplikasi. Ini `Procfile` menggunakan format YAML untuk menentukan diinginkan
+konfigurasi.
 
-The command specified under the `web` entry will be used to start the web
-server.
+Perintah yang ditentukan di bawah `masuk web` akan digunakan untuk memulai web
+Server.
 
-If you have a `Procfile` with the following content:
+Jika Anda memiliki `Procfile` dengan konten berikut:
 ~~~
-web: ruby my_server.rb
+web: ruby ​​my_server.rb
 ~~~
-the `ruby my_server.rb` will be executed upon deployment of a new web
-container.
+yang `ruby my_server.rb` akan dieksekusi pada penyebaran web baru
+kontainer.
 
-Example `Procfiles` that can be used to start the Rails application can be found
-[later in this document][rails-procfile].
+Misalnya `Procfiles` yang dapat digunakan untuk memulai aplikasi Rails dapat ditemukan
+[Nanti dalam dokumen ini] [rel-procfile].
 
-For more context, visit the [Platform documentation][procfile].
+Untuk konteks yang lebih, kunjungi [Landasan dokumentasi] [procfile].
 
 
-## Ruby version
+## Versi Ruby
 
-The Ruby version can be specified in the Gemfile. If no version is specified,
-the default one is used. Currently, the default version is 2.0.0.
+Versi Ruby dapat ditentukan dalam Gemfile. Jika tidak ada versi yang ditentukan,
+yang standar akan digunakan. Saat ini, versi standar adalah 2.0.0.
 
-To specify the version, put the `ruby` directive as the first line in the
-`Gemfile`, e.g.:
+Untuk menentukan versi, menempatkan `direktif ruby` sebagai baris pertama di
+`Gemfile`, mis .:
 ~~~
 ruby "1.9.3"
 ~~~
 
-On the next push, the desired Ruby version will be used.
+Pada dorongan berikutnya, versi Ruby yang diinginkan akan digunakan.
 
-To see all the supported versions, check the [Ruby buildpack][ruby-buildpack]
-documentation.
+Untuk melihat semua versi yang didukung, periksa [Ruby buildpack] [ruby-buildpack]
+dokumentasi.
 
 
-# Rails Notes
+# Rails Catatan
 
 
 ## Rails Procfile
 
-To run a Rails server, create a file named `Procfile` with the following content:
+Untuk menjalankan server Rails, membuat file bernama `Procfile` dengan konten berikut:
 
 ~~~
-web: bundle exec rails s -p $PORT
+web: exec rel bundel s p $ PORT
 ~~~
 
 
-## Asset Pipeline
+## Aset Pipeline
 
-If the asset pipeline is used, the `config/application.rb` file should contain the following line:
+Jika pipa aset yang digunakan, `config / file yang application.rb` harus berisi baris berikut:
 
-~~~ruby
-config.assets.initialize_on_precompile = false if ENV['BUILDPACK_RUNNING']
+~~~ Ruby
+config.assets.initialize_on_precompile = false jika ENV ['BUILDPACK_RUNNING']
 ~~~
 
-This disables the intialization on precompile only during the build process (while in the buildpack), but does not affect the normal code executions, e.g. running a web server or a run command.
+Menonaktifkan intialization pada precompile hanya selama proses membangun (sementara di buildpack), tetapi tidak mempengaruhi eksekusi kode normal, misalnya menjalankan server web atau perintah dijalankan.
 
 
 ## Database
 
-To use a database in a Rails application, the `config/database.yml` file needs to be modified. Credentials and other database-related information should be embedded in ERB snippets. However, the file extension should remain `.yml`.
+Untuk menggunakan database dalam aplikasi Rails, yang `config / file database.yml` perlu dimodifikasi. Kredensial dan informasi database terkait lainnya harus tertanam dalam potongan ERB. Namun, ekstensi file harus tetap `.yml`.
 
-Here is an example of a `database.yml` file that is going to be used in with a MySQL database production environment.
+Berikut adalah contoh dari file `database.yml` yang akan digunakan dengan lingkungan produksi database MySQL.
 
-~~~erb
-development:
-  adapter: sqlite3
-  database: db/development.sqlite3
+~~~ Erb
+pengembangan:
+  adaptor: sqlite3
+  Database: db / development.sqlite3
   pool: 5
-  timeout: 5000
+  batas waktu: 5000
 
-test:
-  adapter: sqlite3
-  database: db/test.sqlite3
+Tes:
+  adaptor: sqlite3
+  Database: db / test.sqlite3
   pool: 5
-  timeout: 5000
+  batas waktu: 5000
 
-production:
-  adapter: mysql2
+Produksi:
+  adaptor: mysql2
   encoding: utf8
   pool: 5
-  database: <%= "'#{ ENV['MYSQLS_DATABASE'] }'" %>
-  host: <%= "'#{ ENV['MYSQLS_HOSTNAME'] }'" %>
-  port: <%= ENV["MYSQLS_PORT"] %>
-  username: <%= "'#{ ENV['MYSQLS_USERNAME'] }'" %>
-  password: <%= "'#{ ENV['MYSQLS_PASSWORD'] }'" %>
+  Database: <% = "'# {ENV [' MYSQLS_DATABASE ']}'"%>
+  host: <% = "'# {ENV [' MYSQLS_HOSTNAME ']}'"%>
+  port: <% = ENV ["MYSQLS_PORT"]%>
+  username: <% = "'# {ENV [' MYSQLS_USERNAME ']}'"%>
+  password: <% = "'# {ENV [' MYSQLS_PASSWORD ']}'"%>
 ~~~
 
-NOTE: As YAML markup characters can be used in the password, strings in the embedded ruby snippets are enclosed in single quotes. Since the port is required to be an integer, it's not enclosed in quotes here.
+CATATAN: Sebagai YAML karakter markup dapat digunakan dalam password, string dalam potongan ruby ​​tertanam diapit tanda kutip tunggal. Karena port diperlukan untuk menjadi integer, itu tidak tertutup dalam tanda kutip di sini.
 
-Alternatively you can use the [cloudcontrol-rails] gem.
+Atau Anda dapat menggunakan [cloudcontrol-rel] permata.
 
 
-## Environments
+Lingkungan ##
 
-Rails servers can be run in different environments. Production is the default one but you can change it by setting the `RAILS_ENV` and `RACK_ENV` environment variables with the [Custom Config addon](https://www.cloudcontrol.com/add-ons/config). For example:
+Rails server dapat dijalankan dalam lingkungan yang berbeda. Produksi adalah default, tetapi Anda dapat mengubahnya dengan menetapkan `` RAILS_ENV` dan lingkungan RAKE_ENV` variabel dengan [Custom Config addon] (https://community.CloudKilat.ch/tutorial/custom-config-add-on/ ). Sebagai contoh:
 
 ~~~
-cctrlapp APP_NAME/DEPLOYMENT config.add RACK_ENV=some_env RAILS_ENV=some_env
+ironcliapp APP_NAME / DEP_NAME config.add RACK_ENV = some_env RAILS_ENV = some_env
 ~~~
 
-NOTE: Gems in development and test environments are excluded from bundle install process.
+CATATAN: Gems dalam pengembangan dan pengujian lingkungan dikecualikan dari bundel proses instalasi.
 
 
 
-[cloudcontrol-rails]: https://rubygems.org/gems/cloudcontrol-rails
-[procfile]: https://www.cloudcontrol.com/dev-center/platform-documentation#version-control-&-images
-[rails-procfile]: #rails-procfile
-[ruby-buildpack]: https://github.com/cloudControl/buildpack-ruby
+[Cloudcontrol-rel]: https://rubygems.org/gems/cloudcontrol-rails
+[Procfile]: /Platform%20Documentation.md/#version-control-images
+[Rel-procfile]: # rel-procfile
+[Ruby-buildpack]: https://github.com/cloudControl/buildpack-ruby

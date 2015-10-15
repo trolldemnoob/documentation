@@ -1,156 +1,156 @@
-# Deploying a Sails.js Application
+# Menyebarkan Aplikasi Sails.js
 
-In this guide we're going to show you how to deploy a [Sails.js] application on [cloudControl]. Sails.js is a real-time [Node.js] MVC framework, designed to mimic the pattern of frameworks like [Ruby on Rails]. It allows you to easily create applications with Node.js using the Model-View-Controller pattern to organize your code so that it is easier to maintain.
+Dalam panduan ini kita akan menunjukkan cara untuk menyebarkan [Sails.js] aplikasi pada [CloudKilat]. Sails.js adalah real-time [Node.js] kerangka MVC, yang dirancang untuk meniru pola kerangka seperti [Ruby on Rails]. Hal ini memungkinkan Anda untuk dengan mudah membuat aplikasi dengan Node.js menggunakan pola MVC untuk mengatur kode Anda sehingga lebih mudah untuk mempertahankan.
 
-If you are new to Sails.js, first, check out the [Sails getting started page] for more info on how to install Sails.
+Jika Anda baru untuk Sails.js, pertama, memeriksa [Sails mendapatkan mulai halaman] untuk info lebih lanjut tentang cara menginstal Sails.
 
-## The Sails.js App Explained
+## The Sails.js App Dijelaskan
 
-### Get the App
+### Dapatkan App
 
-First, clone the Sails.js application from our repository:
+Pertama, mengkloning aplikasi Sails.js dari repositori kami:
 
-~~~bash
-$ git clone https://github.com/cloudControl/nodejs-sails-example-app.git
-$ cd nodejs-sails-example-app
+~~~ Pesta
+$ Git clone https://github.com/cloudControl/nodejs-sails-example-app.git
+$ Cd nodejs-layar-contoh-aplikasi
 ~~~
 
-Now you have a small, but fully functional Sails.js application.
+Sekarang Anda memiliki aplikasi Sails.js kecil, tapi berfungsi penuh.
 
-### Dependency Tracking
+### Ketergantungan Tracking
 
-Dependencies are tracked using [npm] and specified in a `package.json`-file in your project's root directory. 
-The one you cloned as part of the example app looks like this:
+Dependensi dilacak menggunakan [NPM] dan ditentukan dalam `package.json`-file dalam direktori root proyek Anda.
+Yang Anda kloning sebagai bagian dari contoh aplikasi terlihat seperti ini:
 
-~~~json
+~~~ Json
 {
-    "name": "sails-todomvc",
-    "private": true,
-    "version": "0.0.0",
-    "description": "a Sails application",
-    "dependencies": {
-        "sails": "0.9.7",
-        "grunt": "0.4.1",
-        "sails-disk": "~0.9.0",
-        "ejs": "0.8.4",
-        "optimist": "0.3.4",
-        "sails-mysql": "0.9.5"
+    "Nama": "layar-todomvc",
+    "Pribadi": true,
+    "Versi": "0.0.0",
+    "Description": "aplikasi Sails",
+    "Dependensi": {
+        "Layar": "0.9.7",
+        "Mendengus": "0.4.1",
+        "Layar-disk": "~ 0.9.0",
+        "Ejs": "0.8.4",
+        "Optimis": "0.3.4",
+        "Layar-mysql": "0.9.5"
     },
-    "scripts": {
-        "start": "node app.js",
-        "debug": "node debug app.js"
+    "Script": {
+        "Mulai": "simpul app.js",
+        "Debug": "simpul men-debug app.js"
     },
-    "main": "app.js",
-    "repository": "",
-    "author": "",
-    "license": ""
+    "Main": "app.js",
+    "Repositori": "",
+    "Penulis": "",
+    "Lisensi": ""
 }
 ~~~
 
-### Process Type Definition
-cloudControl uses a [Procfile] to start the application processes. The `Procfile` can be found at the root level of your repository.
+### Proses Type Definition
+CloudKilat menggunakan [Procfile] untuk memulai proses aplikasi. The `Procfile` dapat ditemukan di tingkat akar repositori Anda.
 
-To start the sails server, you need to use the `sails lift` command. This command is included in the procfile definition as shown below: 
+Untuk memulai server layar, Anda perlu menggunakan `layar lift` perintah. Perintah ini termasuk dalam definisi procfile seperti berikut:
 
 ~~~
-web:  export NODE_ENV=production; sails lift
+web: ekspor NODE_ENV = produksi; angkat layar
 ~~~
 
-Left from the colon we specified the **required** process type called `web` for a web application and followed by the command that starts the Sails server.
+Kiri dari usus besar kita ditentukan ** diperlukan ** Jenis proses yang disebut `web` untuk aplikasi web dan diikuti dengan perintah yang dimulai server Sails.
 
-### Connecting the Sails.js Application to a Database
-Sails.js is database agnostic. It provides a simple data access layer that works, no matter what database you're using. All you have to do is plug in one of the adapters for your database. Here, we show you how to connect your Sails.js application to a MySQL database using the cloudControl [Shared MySQL Add-on]. 
+### Menghubungkan Aplikasi Sails.js ke Database
+Sails.js adalah database yang agnostik. Ini menyediakan akses data lapisan sederhana yang bekerja, tidak peduli apa database yang Anda gunakan. Yang harus Anda lakukan adalah steker di salah satu adapter untuk database Anda. Di sini, kami tunjukkan cara untuk menghubungkan aplikasi Sails.js Anda ke database MySQL menggunakan CloudKilat [Bersama MySQL Add-on].
 
-Have a look at the `config/adapter.js` file so you can find out how to [get the MySQL credentials] provided by MySQLs Add-on:
+Silahkan lihat di `config / file adapter.js` sehingga Anda dapat mengetahui bagaimana [mendapatkan mandat MySQL] disediakan oleh MySQLs Add-on:
 
-~~~javascript
+~~~ Javascript
 module.exports.adapters = {
 
-    'default': process.env.NODE_ENV || 'development',
+    'Default': process.env.NODE_ENV || 'pembangunan',
 
-    development: {
-        module: 'sails-mysql',
+    pembangunan: {
+        Modul: 'layar-mysql',
         host: 'localhost',
-        user: 'todouser',
+        pengguna: 'todouser',
         password: 'todopass',
-        database: 'todomvc',
-        pool: true,
+        Database: 'todomvc',
+        Kolam renang: benar,
         connectionLimit: 2,
         waitForConnections: true
     },
 
-    production: {
-        module: 'sails-mysql',
-        host: process.env.MYSQLS_HOSTNAME,
-        user: process.env.MYSQLS_USERNAME,
+    Produksi: {
+        Modul: 'layar-mysql',
+        tuan rumah: process.env.MYSQLS_HOSTNAME,
+        pengguna: process.env.MYSQLS_USERNAME,
         password: process.env.MYSQLS_PASSWORD,
-        database: process.env.MYSQLS_DATABASE,
-        pool: true,
+        Database: process.env.MYSQLS_DATABASE,
+        Kolam renang: benar,
         connectionLimit: 2,
         waitForConnections: true
     }
 };
 ~~~
 
-### Socket.io and Websocket Support
+### Socket.io dan Dukungan WebSocket
 
-In Sails.js, client-backend communication is done using [websockets]. In order to use websockets, it is important to use `*.cloudcontrolapp.com` domain instead of `*.cloudcontrolled.com`. For more details, take a look at the [cloudControl websockets documentation].
+Dalam Sails.js, komunikasi client-backend dilakukan dengan menggunakan [WebSockets]. Untuk lebih jelasnya, kita lihat di [CloudKilat WebSockets dokumentasi].
 
-## Pushing and Deploying your Sails.js App
-To deploy your Sails.js application, choose a unique name to replace the `APP_NAME` placeholder for your application and create it on the cloudControl platform:
+## Mendorong dan Menyebarkan Anda Sails.js App
+Untuk menyebarkan aplikasi Sails.js Anda, pilih nama yang unik untuk menggantikan `APP_NAME` tempat untuk aplikasi Anda dan membuatnya pada platform CloudKilat:
 
-~~~bash
-$ cctrlapp APP_NAME create nodejs
+~~~ Pesta
+$ Ironcliapp APP_NAME membuat nodejs
 ~~~
 
-Push your code to the application's repository, which triggers the deployment image build process:
+Mendorong kode Anda ke repositori aplikasi, yang memicu penyebaran gambar proses build:
 
-~~~bash
-$ cctrlapp APP_NAME/default push
-Counting objects: 73, done.
-Delta compression using up to 8 threads.
-Compressing objects: 100% (35/35), done.
-Writing objects: 100% (73/73), 267.28 KiB | 0 bytes/s, done.
-Total 73 (delta 30), reused 73 (delta 30)
+~~~ Pesta
+$ Ironcliapp APP_NAME / dorongan bawaan
+Menghitung benda: 73, dilakukan.
+Delta kompresi menggunakan hingga 8 benang.
+Mengompresi objek: 100% (35/35), dilakukan.
+Menulis objek: 100% (73/73), 267,28 KiB | 0 byte / s, dilakukan.
+Total 73 (delta 30), kembali 73 (delta 30)
 
------> Receiving push
------> Resolving engine versions
+-----> Mendorong Menerima
+-----> Menyelesaikan versi mesin
 
-       Using Node.js version: 0.10.15
-       Using npm version: 1.3.5
------> Fetching Node.js binaries
------> Installing dependencies with npm
+       Menggunakan versi Node.js: 0.10.15
+       Menggunakan versi NPM: 1.3.5
+-----> Mengambil Node.js binari
+-----> Dependensi Instalasi dengan NPM
        ...
-       Dependencies installed
------> Building runtime environment
------> Building image
------> Uploading image (17M)
+       Dependensi diinstal
+-----> Bangunan lingkungan runtime
+-----> Gambar Building
+-----> Gambar Mengunggah (17M)
 
-To ssh://APP_NAME@cloudcontrolled.com/repository.git
- * [new branch]      master -> master
+Untuk ssh: //APP_NAME@kilatiron.net/repository.git
+ * [Cabang baru] Master -> Master
 ~~~
 
-Add the [Shared MySQL Add-on]:
-~~~bash
-$ cctrlapp APP_NAME/default addon.add mysqls.free
+Tambahkan [Bersama MySQL Add-on]:
+~~~ Pesta
+$ Ironcliapp APP_NAME / default addon.add mysqls.free
 ~~~
 
-Finally, deploy the Sails.js application:
-~~~bash
-$ cctrlapp APP_NAME/default deploy
+Akhirnya, menyebarkan aplikasi Sails.js:
+~~~ Pesta
+$ Ironcliapp APP_NAME / default menyebarkan
 ~~~
 
-Congratulations, you can now see your Sails.js application running at
-`http://APP_NAME.cloudcontrolapp.com`.
+Selamat, Anda sekarang dapat melihat aplikasi Sails.js Anda berjalan pada
+`Http: // APP_NAME.kilatiron.net`.
 
 [Node.js]: http://nodejs.org/
 [Sails.js]: http://sailsjs.org/
-[Sails getting started page]: http://sailsjs.org/#!getStarted
+[Sails mendapatkan halaman mulai]: http://sailsjs.org/#!getStarted
 [Ruby on Rails]: http://rubyonrails.org/
-[npm]: https://npmjs.org/
-[cloudControl]: http://www.cloudcontrol.com
-[Procfile]: https://www.cloudcontrol.com/dev-center/platform-documentation#buildpacks-and-the-procfile
-[get the MySQL credentials]: https://www.cloudcontrol.com/dev-center/guides/nodejs/add-on-credentials-1
-[websockets]: http://socket.io/
-[cloudControl websockets documentation]: https://www.cloudcontrol.com/dev-center/platform-documentation#websockets
-[Shared MySQL Add-on]: https://www.cloudcontrol.com/dev-center/add-on-documentation/mysqls
+[NPM]: https://npmjs.org/
+[CloudKilat]: http://www.cloudkilat.com/
+[Procfile]: /Platform%20Documentation.md/#buildpacks-and-the-procfile
+[Mendapatkan mandat MySQL]: /Guides/NodeJS/Add-on%20credentials.md
+[WebSockets]: http://socket.io/
+[CloudKilat WebSockets dokumentasi]: /Platform%20Documentation.md/#websockets
+[Bersama MySQL Add-on]: /Add-on%20Documentation/Data%20Storage/MySQLs.md
